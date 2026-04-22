@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { TextArea, TextInput } from "@/components/ui/form-controls";
 
 type PropertyInquiryFormProps = {
@@ -11,6 +12,7 @@ type PropertyInquiryFormProps = {
 export function PropertyInquiryForm({ propertyId, propertySlug }: PropertyInquiryFormProps) {
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const startedAt = useRef(Date.now());
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,7 +26,9 @@ export function PropertyInquiryForm({ propertyId, propertySlug }: PropertyInquir
       email: formData.get("email"),
       phone: formData.get("phone"),
       preferredContactMethod: formData.get("preferredContactMethod"),
-      message: formData.get("message")
+      message: formData.get("message"),
+      website: formData.get("website"),
+      formStartedAt: startedAt.current
     };
 
     const response = await fetch("/api/inquiry", {
@@ -41,13 +45,16 @@ export function PropertyInquiryForm({ propertyId, propertySlug }: PropertyInquir
       return;
     }
 
+    trackEvent("property_inquiry", { property_slug: propertySlug });
     event.currentTarget.reset();
+    startedAt.current = Date.now();
     setState("success");
     setMessage(data.message || "Inquiry submitted successfully");
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-5 space-y-3 text-sm">
+    <form onSubmit={onSubmit} className="mt-5 space-y-3 text-sm" aria-live="polite">
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <TextInput name="name" placeholder="Full name" required />
       <TextInput name="email" type="email" placeholder="Email" required />
       <TextInput name="phone" placeholder="Phone number" />

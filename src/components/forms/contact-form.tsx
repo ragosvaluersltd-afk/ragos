@@ -1,11 +1,13 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { TextArea, TextInput } from "@/components/ui/form-controls";
 
 export function ContactForm() {
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const startedAt = useRef(Date.now());
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -17,7 +19,9 @@ export function ContactForm() {
       name: formData.get("name"),
       email: formData.get("email"),
       phone: formData.get("phone"),
-      message: formData.get("message")
+      message: formData.get("message"),
+      website: formData.get("website"),
+      formStartedAt: startedAt.current
     };
 
     const response = await fetch("/api/contact", {
@@ -34,15 +38,19 @@ export function ContactForm() {
       return;
     }
 
+    trackEvent("contact_submission", { form: "contact" });
     event.currentTarget.reset();
+    startedAt.current = Date.now();
     setState("success");
     setMessage(data.message || "Submitted");
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
+    <form onSubmit={onSubmit} className="rounded-xl border border-slate-200 bg-white p-6 shadow-card sm:p-8" aria-live="polite">
       <h2 className="text-2xl font-semibold text-brand-navy">Quick Inquiry</h2>
+      <p className="mt-2 text-xs text-brand-slate">Response time: typically within one business day.</p>
       <div className="mt-5 space-y-4">
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
         <TextInput name="name" placeholder="Full Name" required />
         <TextInput name="email" type="email" placeholder="Email Address" required />
         <TextInput name="phone" placeholder="Phone Number" />
@@ -51,7 +59,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={state === "submitting"}
-        className="mt-5 inline-flex items-center rounded-lg bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white"
+        className="mt-5 inline-flex items-center rounded-lg bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
       >
         {state === "submitting" ? "Submitting..." : "Submit Inquiry"}
       </button>

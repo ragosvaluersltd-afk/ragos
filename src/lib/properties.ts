@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { properties as mockProperties } from "@/data/properties";
 import { getAllPropertiesData, filterProperties, sortProperties } from "@/lib/queries/property-queries";
 import { supabasePropertyRepository } from "@/lib/supabase/property-queries";
@@ -7,12 +8,17 @@ function canUseSupabase() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 }
 
-export async function getAllProperties() {
-  if (canUseSupabase()) {
-    return supabasePropertyRepository.getAll();
-  }
+const getAllPropertiesCached = unstable_cache(
+  async () => {
+    if (canUseSupabase()) return supabasePropertyRepository.getAll();
+    return getAllPropertiesData();
+  },
+  ["all-properties"],
+  { revalidate: 300 }
+);
 
-  return getAllPropertiesData();
+export async function getAllProperties() {
+  return getAllPropertiesCached();
 }
 
 export async function getFeaturedProperties(limit = 3) {

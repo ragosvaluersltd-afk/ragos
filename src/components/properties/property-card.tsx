@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { formatListingTypeBadge, formatLocation, formatPrice, formatPropertySize, formatPropertyType } from "@/lib/formatters";
 import { PropertyListing } from "@/types";
@@ -9,10 +10,13 @@ export function PropertyCard({ property }: { property: PropertyListing }) {
       className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-soft"
     >
       <div className="relative h-56 overflow-hidden bg-brand-mist">
-        <img
+        <Image
           src={property.coverImage.url}
           alt={property.coverImage.alt}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          className="object-cover transition duration-500 group-hover:scale-105"
+          loading="lazy"
         />
         <div className="absolute left-4 top-4 flex items-center gap-2">
           <span className="rounded-full bg-brand-blue/95 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">

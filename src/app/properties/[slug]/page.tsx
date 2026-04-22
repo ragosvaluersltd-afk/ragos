@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PropertyInquiryForm } from "@/components/forms/property-inquiry-form";
 import { notFound } from "next/navigation";
 import { PropertyCard } from "@/components/properties/property-card";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import {
   formatListingTypeBadge,
@@ -13,6 +15,9 @@ import {
   formatReferenceCode
 } from "@/lib/formatters";
 import { getAllProperties, getPropertyBySlug, getRelatedProperties } from "@/lib/properties";
+import { getBaseUrl } from "@/lib/site-config";
+
+const baseUrl = getBaseUrl();
 
 export async function generateStaticParams() {
   const properties = await getAllProperties();
@@ -25,18 +30,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!property) {
     return {
-      title: "Property not found | Ragos Valuers and Estate Agents"
+      title: "Property not found"
     };
   }
 
   return {
-    title: `${property.title} | Ragos Valuers and Estate Agents`,
+    title: property.title,
     description: property.summary,
+    alternates: { canonical: `/properties/${property.slug}` },
     openGraph: {
       title: property.title,
       description: property.summary,
       images: [{ url: property.coverImage.url, alt: property.coverImage.alt }],
-      type: "article"
+      type: "website"
     },
     twitter: {
       card: "summary_large_image",
@@ -54,9 +60,41 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
   if (!property) notFound();
 
   const related = await getRelatedProperties(property, 3);
+  const propertyUrl = `${baseUrl}/properties/${property.slug}`;
 
   return (
     <div className="pb-16">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "RealEstateListing",
+          name: property.title,
+          description: property.summary,
+          url: propertyUrl,
+          datePosted: property.publishedAt,
+          image: [property.coverImage.url, ...property.gallery.map((item) => item.url)],
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: property.location
+          },
+          offers: {
+            "@type": "Offer",
+            priceCurrency: property.currency,
+            price: property.price
+          }
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${baseUrl}/` },
+            { "@type": "ListItem", position: 2, name: "Properties", item: `${baseUrl}/properties` },
+            { "@type": "ListItem", position: 3, name: property.title, item: propertyUrl }
+          ]
+        }}
+      />
       <section className="bg-gradient-to-br from-brand-mist via-white to-[#fdf6eb] py-14 sm:py-16">
         <Container>
           <Link href="/properties" className="text-sm font-medium text-brand-blue hover:text-[#25277a]">
@@ -96,8 +134,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       <Container className="mt-10 space-y-10">
         <section className="grid gap-4 lg:grid-cols-3">
           {[property.coverImage, ...property.gallery].map((image, index) => (
-            <div key={image.url} className={`${index === 0 ? "lg:col-span-2" : ""} overflow-hidden rounded-2xl bg-brand-mist`}>
-              <img src={image.url} alt={image.alt} className="h-64 w-full object-cover sm:h-80" />
+            <div key={`${image.url}-${index}`} className={`${index === 0 ? "lg:col-span-2" : ""} relative overflow-hidden rounded-2xl bg-brand-mist`}>
+              <Image src={image.url} alt={image.alt} width={1200} height={800} className="h-64 w-full object-cover sm:h-80" loading="lazy" />
             </div>
           ))}
         </section>
