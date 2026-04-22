@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PropertyInquiryForm } from "@/components/forms/property-inquiry-form";
 import { notFound } from "next/navigation";
 import { PropertyCard } from "@/components/properties/property-card";
 import { Container } from "@/components/ui/container";
@@ -30,7 +31,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${property.title} | Ragos Valuers and Estate Agents`,
-    description: property.summary
+    description: property.summary,
+    openGraph: {
+      title: property.title,
+      description: property.summary,
+      images: [{ url: property.coverImage.url, alt: property.coverImage.alt }],
+      type: "article"
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: property.title,
+      description: property.summary,
+      images: [property.coverImage.url]
+    }
   };
 }
 
@@ -69,10 +82,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <p className="mt-2 text-sm text-brand-slate">
                 Speak directly with our agency team for availability, inspections, and advisory on this listing.
               </p>
-              <div className="mt-5 space-y-3 text-sm">
-                <Link href="/contact" className="block rounded-lg bg-brand-blue px-4 py-2.5 text-center font-semibold text-white">
-                  Make an inquiry
-                </Link>
+              <PropertyInquiryForm propertyId={property.id} propertySlug={property.slug} />
+              <div className="mt-3 text-sm">
                 <Link href="tel:+254700000000" className="block rounded-lg border border-brand-blue px-4 py-2.5 text-center font-semibold text-brand-blue">
                   Call +254 700 000 000
                 </Link>

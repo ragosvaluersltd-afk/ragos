@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { TextArea, TextInput } from "@/components/ui/form-controls";
+import { ContactForm } from "@/components/forms/contact-form";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/shared/section";
 
@@ -19,18 +18,7 @@ export default function ContactPage() {
             <p className="mt-2 text-sm text-brand-slate">Phone: +254 700 000 000</p>
             <p className="mt-2 text-sm text-brand-slate">Email: info@ragosvaluers.co.ke</p>
           </div>
-          <form className="rounded-xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
-            <h2 className="text-2xl font-semibold text-brand-navy">Quick Inquiry</h2>
-            <div className="mt-5 space-y-4">
-              <TextInput placeholder="Full Name" />
-              <TextInput type="email" placeholder="Email Address" />
-              <TextInput placeholder="Phone Number" />
-              <TextArea placeholder="How can we assist you?" rows={5} />
-            </div>
-            <Button href="/contact" className="mt-5">
-              Submit Inquiry
-            </Button>
-          </form>
+          <ContactForm />
         </div>
       </Section>
     </>

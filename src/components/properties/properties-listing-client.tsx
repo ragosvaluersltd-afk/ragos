@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { PropertyCard } from "@/components/properties/property-card";
 import { BEDROOM_OPTIONS, LISTING_TYPE_OPTIONS, PROPERTY_TYPE_OPTIONS, SORT_OPTIONS } from "@/lib/listing-filters";
-import { filterProperties, sortProperties } from "@/lib/properties";
+import { filterProperties, sortProperties } from "@/lib/queries/property-queries";
 import { PropertyFilterInput, PropertyListing, PropertySortOption } from "@/types";
 
 const PAGE_SIZE = 6;
