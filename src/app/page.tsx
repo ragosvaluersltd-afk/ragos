@@ -3,7 +3,8 @@ import { Section } from "@/components/shared/section";
 import { Button } from "@/components/ui/button";
 import { ArticleCard, PropertyCard, ServiceCard, StatCard } from "@/components/ui/cards";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { featuredProperties, insights, services } from "@/data/site";
+import { insights, services } from "@/data/site";
+import { getFeaturedProperties } from "@/lib/properties";
 
 const trustItems = ["Since 2005", "Professional Real Estate Services", "Valuation Expertise", "Market Knowledge"];
 const whyUs = [
@@ -23,7 +24,8 @@ const valuationCategories = [
   "Land Valuation"
 ];
 
-export default function Home() {
+export default async function Home() {
+  const featuredProperties = await getFeaturedProperties(3);
   return (
     <>
       <Section className="bg-brand-mist/50 pb-12 pt-20 sm:pt-24">
@@ -133,7 +135,7 @@ export default function Home() {
         />
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
           {featuredProperties.map((property) => (
-            <PropertyCard key={property.title} property={property} />
+            <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       </Section>

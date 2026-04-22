@@ -1,4 +1,4 @@
-import { Insight, Property, Service } from "@/types";
+import { Insight, Service } from "@/types";
 
 export const navLinks = [
   { label: "Home", href: "/" },
@@ -30,27 +30,6 @@ export const services: Service[] = [
     title: "Sales and Lettings",
     description: "Structured sales and rental support for residential, commercial, and mixed-use assets.",
     href: "/properties"
-  }
-];
-
-export const featuredProperties: Property[] = [
-  {
-    title: "Riverside Executive Offices",
-    location: "Westlands, Nairobi",
-    price: "KES 280,000 / month",
-    type: "Commercial Letting"
-  },
-  {
-    title: "Garden Court Residences",
-    location: "Kilimani, Nairobi",
-    price: "KES 24,500,000",
-    type: "Residential Sale"
-  },
-  {
-    title: "Logistics Yard Parcel",
-    location: "Mombasa Road, Nairobi",
-    price: "KES 98,000,000",
-    type: "Land Sale"
   }
 ];
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Insight, Property, Service } from "@/types";
+import { PropertyCard } from "@/components/properties/property-card";
+import { Insight, Service } from "@/types";
 
 export function ServiceCard({ service }: { service: Service }) {
   return (
@@ -22,19 +23,7 @@ export function StatCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function PropertyCard({ property }: { property: Property }) {
-  return (
-    <article className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card">
-      <div className="h-44 bg-gradient-to-br from-[#dfe4f8] to-[#f6f8fd]" />
-      <div className="p-5">
-        <p className="text-xs uppercase tracking-[0.1em] text-brand-slate">{property.type}</p>
-        <h3 className="mt-2 text-lg font-semibold text-brand-navy">{property.title}</h3>
-        <p className="mt-1 text-sm text-brand-slate">{property.location}</p>
-        <p className="mt-4 text-sm font-semibold text-brand-blue">{property.price}</p>
-      </div>
-    </article>
-  );
-}
+export { PropertyCard };
 
 export function ArticleCard({ article }: { article: Insight }) {
   return (

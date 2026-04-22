@@ -4,15 +4,10 @@ export type Service = {
   href: string;
 };
 
-export type Property = {
-  title: string;
-  location: string;
-  price: string;
-  type: string;
-};
-
 export type Insight = {
   title: string;
   excerpt: string;
   date: string;
 };
+
+export * from "./property";
