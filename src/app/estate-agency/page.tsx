@@ -18,7 +18,7 @@ export default function EstateAgencyPage() {
         title="Professional Representation for Sales and Lettings"
         description="We support owners, buyers, landlords, and tenants with structured agency services grounded in local market realities."
       />
-      <Section>
+      <Section className="bg-[#f8faff]">
         <div className="grid gap-6 md:grid-cols-2">
           <PageBlock title="Sales Advisory">
             We guide property sales through pricing support, buyer qualification, negotiation coordination, and transaction management.

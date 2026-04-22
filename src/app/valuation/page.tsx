@@ -22,12 +22,12 @@ export default function ValuationServicesPage() {
         title="Independent Valuation for Informed Property Decisions"
         description="Our valuation practice is structured to support lending, transactions, risk management, and portfolio planning with professional consistency."
       />
-      <Section>
+      <Section className="bg-[#f8faff]">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <PageBlock title="Valuation Categories">
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {categories.map((item) => (
-                <div key={item} className="rounded-md border border-slate-200 px-4 py-3 font-medium text-brand-navy">
+                <div key={item} className="rounded-lg border border-slate-200 bg-white px-4 py-3 font-medium text-brand-navy">
                   {item}
                 </div>
               ))}

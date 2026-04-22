@@ -29,7 +29,7 @@ export default function AboutPage() {
         title="A Trusted Real Estate Valuation Firm Since 2005"
         description="Ragos Valuers and Estate Agents serves clients with professional valuation, agency, and advisory support shaped by long-standing market participation."
       />
-      <Section>
+      <Section className="bg-[#f8faff]">
         <div className="grid gap-6 lg:grid-cols-2">
           <PageBlock title="Our Professional Mandate">
             We provide independent and well-supported valuation advice for lenders, investors, institutions, and private clients, while maintaining disciplined service standards across all assignments.
