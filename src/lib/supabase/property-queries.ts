@@ -1,5 +1,5 @@
 import { mapPropertyRowToListing } from "@/lib/mappers/property";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { filterProperties, sortProperties } from "@/lib/queries/property-queries";
 import { PropertyFilterInput, PropertyListing, PropertySortOption } from "@/types";
 import { PropertyRow } from "@/types/supabase";
@@ -16,7 +16,7 @@ const PROPERTY_SELECT =
   "id,title,slug,listing_type,property_type,price,currency,city,location,sublocation,bedrooms,bathrooms,size_sqm,size_sqft,summary,description,features,amenities,status,featured,cover_image_url,cover_image_alt,gallery,reference_code,published_at,created_at,updated_at";
 
 async function getPropertyRows(params: Record<string, string | number | boolean> = {}) {
-  const client = createSupabaseServerClient();
+  const client = createSupabasePublicClient();
 
   const rows = await client.request<PropertyRow[]>("properties", {
     params: {
