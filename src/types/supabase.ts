@@ -90,3 +90,7 @@ export type ContactInsert = Omit<Database["public"]["Tables"]["contacts"]["Row"]
 export type InquiryInsert = Omit<Database["public"]["Tables"]["inquiries"]["Row"], "id" | "created_at">;
 export type ValuationRequestInsert = Omit<Database["public"]["Tables"]["valuation_requests"]["Row"], "id" | "created_at">;
 export type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
+
+export type ContactRow = Database["public"]["Tables"]["contacts"]["Row"];
+export type InquiryRow = Database["public"]["Tables"]["inquiries"]["Row"];
+export type ValuationRequestRow = Database["public"]["Tables"]["valuation_requests"]["Row"];
