@@ -7,7 +7,7 @@ export function PropertyCard({ property }: { property: PropertyListing }) {
   return (
     <Link
       href={`/properties/${property.slug}`}
-      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-soft"
+      className="group overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-soft"
     >
       <div className="relative h-56 overflow-hidden bg-brand-mist">
         <Image

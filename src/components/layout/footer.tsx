@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import { contactDetails } from "@/data/contact";
 
 const quickLinks = [
   ["About", "/about"],
@@ -21,8 +22,9 @@ const serviceLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-brand-navy py-16 text-slate-200">
-      <Container>
+    <footer className="relative overflow-hidden bg-brand-navy py-16 text-slate-200">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(248,148,29,0.14),transparent_45%)]" />
+      <Container className="relative">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <h3 className="text-base font-semibold text-white">Ragos Valuers and Estate Agents</h3>
@@ -56,9 +58,10 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-[0.12em] text-white">Contact</h4>
             <ul className="mt-4 space-y-3 text-sm text-slate-300">
-              <li>Nairobi, Kenya</li>
-              <li>+254 700 000 000</li>
-              <li>info@ragosvaluers.co.ke</li>
+              <li>{contactDetails.office}</li>
+              <li>Valuation: {contactDetails.valuationPhoneDisplay}</li>
+              <li>Inquiries: {contactDetails.inquiriesPhoneDisplay}</li>
+              <li className="break-all">{contactDetails.email}</li>
             </ul>
           </div>
         </div>

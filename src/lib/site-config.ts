@@ -3,8 +3,8 @@ export const siteConfig = {
   description:
     "Professional valuation, estate agency, and property advisory services in Kenya.",
   url: "https://ragosvaluers.co.ke",
-  phone: "+254700000000",
-  email: "info@ragosvaluers.co.ke",
+  phone: "+254704052628",
+  email: "ragosvaluersltd@gmail.com",
   addressLocality: "Nairobi",
   addressCountry: "KE"
 } as const;

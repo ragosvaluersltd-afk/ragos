@@ -3,7 +3,7 @@ import { Section } from "@/components/shared/section";
 
 export function CtaSection() {
   return (
-    <Section className="bg-brand-blue text-white">
+    <Section className="bg-gradient-to-r from-brand-blue via-[#3b3fb0] to-brand-navy text-white">
       <div className="grid gap-8 lg:grid-cols-[1.4fr_auto] lg:items-center">
         <div>
           <h2 className="text-3xl font-bold sm:text-4xl">Request a Professional Property Valuation</h2>

@@ -2,14 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { PropertyCard } from "@/components/properties/property-card";
-import { BEDROOM_OPTIONS, LISTING_TYPE_OPTIONS, PROPERTY_TYPE_OPTIONS, SORT_OPTIONS } from "@/lib/listing-filters";
+import { BEDROOM_OPTIONS, LISTING_TYPE_OPTIONS, PROPERTY_TYPE_OPTIONS, sanitizeFilterInput, SORT_OPTIONS } from "@/lib/listing-filters";
 import { filterProperties, sortProperties } from "@/lib/queries/property-queries";
 import { PropertyFilterInput, PropertyListing, PropertySortOption } from "@/types";
 
 const PAGE_SIZE = 6;
 
-export function PropertiesListingClient({ properties }: { properties: PropertyListing[] }) {
-  const [filters, setFilters] = useState<PropertyFilterInput>({ listingType: "all", propertyType: "all" });
+export function PropertiesListingClient({ properties, initialFilters }: { properties: PropertyListing[]; initialFilters?: PropertyFilterInput }) {
+  const [filters, setFilters] = useState<PropertyFilterInput>(sanitizeFilterInput({ listingType: "all", propertyType: "all", ...initialFilters }));
   const [sortBy, setSortBy] = useState<PropertySortOption>("newest");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -23,7 +23,7 @@ export function PropertiesListingClient({ properties }: { properties: PropertyLi
 
   function handleFilterChange<K extends keyof PropertyFilterInput>(key: K, value?: PropertyFilterInput[K]) {
     setVisibleCount(PAGE_SIZE);
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    setFilters((prev) => sanitizeFilterInput({ ...prev, [key]: value }));
   }
 
   function clearFilters() {
@@ -34,7 +34,7 @@ export function PropertiesListingClient({ properties }: { properties: PropertyLi
 
   return (
     <div className="space-y-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card sm:p-6">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <select
             value={filters.listingType ?? "all"}

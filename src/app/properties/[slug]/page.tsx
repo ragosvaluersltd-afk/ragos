@@ -16,6 +16,7 @@ import {
 } from "@/lib/formatters";
 import { getAllProperties, getPropertyBySlug, getRelatedProperties } from "@/lib/properties";
 import { getBaseUrl } from "@/lib/site-config";
+import { contactDetails } from "@/data/contact";
 
 const baseUrl = getBaseUrl();
 
@@ -122,8 +123,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </p>
               <PropertyInquiryForm propertyId={property.id} propertySlug={property.slug} />
               <div className="mt-3 text-sm">
-                <Link href="tel:+254700000000" className="block rounded-lg border border-brand-blue px-4 py-2.5 text-center font-semibold text-brand-blue">
-                  Call +254 700 000 000
+                <Link href={contactDetails.inquiriesPhoneHref} className="block rounded-lg border border-brand-blue px-4 py-2.5 text-center font-semibold text-brand-blue">
+                  Call {contactDetails.inquiriesPhoneDisplay}
                 </Link>
               </div>
             </aside>

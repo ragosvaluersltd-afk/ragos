@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { Section } from "@/components/shared/section";
 import { getAllProperties } from "@/lib/properties";
 import { getBaseUrl } from "@/lib/site-config";
+import { PropertyFilterInput } from "@/types";
 
 export const revalidate = 300;
 
@@ -14,9 +15,29 @@ export const metadata: Metadata = {
   alternates: { canonical: "/properties" }
 };
 
-export default async function PropertiesPage() {
+function parseSearchFilters(searchParams: Record<string, string | string[] | undefined>): PropertyFilterInput {
+  const listingType = typeof searchParams.listingType === "string" ? searchParams.listingType : undefined;
+  const propertyType = typeof searchParams.propertyType === "string" ? searchParams.propertyType : undefined;
+  const location = typeof searchParams.location === "string" ? searchParams.location : undefined;
+  const minPrice = typeof searchParams.minPrice === "string" ? Number(searchParams.minPrice) : undefined;
+  const maxPrice = typeof searchParams.maxPrice === "string" ? Number(searchParams.maxPrice) : undefined;
+  const bedrooms = typeof searchParams.bedrooms === "string" ? Number(searchParams.bedrooms) : undefined;
+
+  return {
+    listingType: listingType as PropertyFilterInput["listingType"],
+    propertyType: propertyType as PropertyFilterInput["propertyType"],
+    location,
+    minPrice: Number.isFinite(minPrice) ? minPrice : undefined,
+    maxPrice: Number.isFinite(maxPrice) ? maxPrice : undefined,
+    bedrooms: Number.isFinite(bedrooms) ? bedrooms : undefined
+  };
+}
+
+export default async function PropertiesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const properties = await getAllProperties();
   const baseUrl = getBaseUrl();
+  const resolvedSearchParams = await searchParams;
+  const initialFilters = parseSearchFilters(resolvedSearchParams);
 
   return (
     <>
@@ -41,8 +62,8 @@ export default async function PropertiesPage() {
           </p>
         </div>
       </section>
-      <Section className="pt-10 sm:pt-12">
-        <PropertiesListingClient properties={properties} />
+      <Section className="bg-[#f8faff] pt-10 sm:pt-12">
+        <PropertiesListingClient properties={properties} initialFilters={initialFilters} />
       </Section>
     </>
   );
