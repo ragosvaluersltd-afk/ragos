@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CtaSection } from "@/components/sections/cta-section";
 import { Section } from "@/components/shared/section";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,14 @@ import { ArticleCard, PropertyCard, ServiceCard, StatCard } from "@/components/u
 import { SectionHeading } from "@/components/ui/section-heading";
 import { insights, services } from "@/data/site";
 import { getFeaturedProperties } from "@/lib/properties";
+
+export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Trusted property valuation, estate agency, and advisory services in Kenya since 2005.",
+  alternates: { canonical: "/" }
+};
 
 const trustItems = ["Since 2005", "Professional Real Estate Services", "Valuation Expertise", "Market Knowledge"];
 const whyUs = [
@@ -39,7 +48,7 @@ export default async function Home() {
               Ragos Valuers and Estate Agents delivers independent valuation expertise, supported by practical estate agency services and informed advisory for property owners, institutions, and investors.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button href="/contact">Request a Valuation</Button>
+              <Button href="/valuation">Request a Valuation</Button>
               <Button href="/properties" variant="outline">
                 Explore Properties
               </Button>
@@ -112,6 +121,7 @@ export default async function Home() {
           tag="Valuation Focus"
           title="Valuation Services Designed for Confidence and Compliance"
           description="Our valuation assignments are structured to support lending, transaction, insurance, investment, and portfolio decision requirements."
+          action={<Button href="/valuation" variant="secondary">Start valuation request</Button>}
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {valuationCategories.map((category) => (

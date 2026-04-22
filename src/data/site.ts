@@ -3,7 +3,7 @@ import { Insight, Service } from "@/types";
 export const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Valuation Services", href: "/valuation-services" },
+  { label: "Valuation", href: "/valuation" },
   { label: "Estate Agency", href: "/estate-agency" },
   { label: "Properties", href: "/properties" },
   { label: "Insights", href: "/insights" },
@@ -12,9 +12,9 @@ export const navLinks = [
 
 export const services: Service[] = [
   {
-    title: "Valuation Services",
+    title: "Valuation",
     description: "Professional valuation reports for mortgage, market, insurance, and statutory requirements.",
-    href: "/valuation-services"
+    href: "/valuation"
   },
   {
     title: "Estate Agency",

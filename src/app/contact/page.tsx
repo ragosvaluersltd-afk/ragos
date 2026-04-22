@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contact-form";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/shared/section";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Contact Ragos Valuers and Estate Agents for valuation requests, property inquiries, and advisory support.",
+  alternates: { canonical: "/contact" }
+};
 
 export default function ContactPage() {
   return (
@@ -17,6 +24,7 @@ export default function ContactPage() {
             <p className="mt-4 text-sm text-brand-slate">Nairobi, Kenya</p>
             <p className="mt-2 text-sm text-brand-slate">Phone: +254 700 000 000</p>
             <p className="mt-2 text-sm text-brand-slate">Email: info@ragosvaluers.co.ke</p>
+            <p className="mt-4 text-xs text-brand-slate">Trusted by lenders, investors, and property owners since 2005.</p>
           </div>
           <ContactForm />
         </div>

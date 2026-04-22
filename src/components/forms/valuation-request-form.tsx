@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { TextArea, TextInput } from "@/components/ui/form-controls";
 
 const valuationTypes = [
@@ -15,6 +16,7 @@ const valuationTypes = [
 export function ValuationRequestForm() {
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const startedAt = useRef(Date.now());
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -28,7 +30,9 @@ export function ValuationRequestForm() {
       propertyLocation: formData.get("propertyLocation"),
       propertyType: formData.get("propertyType"),
       valuationType: formData.get("valuationType"),
-      additionalNotes: formData.get("additionalNotes")
+      additionalNotes: formData.get("additionalNotes"),
+      website: formData.get("website"),
+      formStartedAt: startedAt.current
     };
 
     const response = await fetch("/api/valuation", {
@@ -45,15 +49,19 @@ export function ValuationRequestForm() {
       return;
     }
 
+    trackEvent("valuation_request", { form: "valuation" });
     event.currentTarget.reset();
+    startedAt.current = Date.now();
     setState("success");
     setMessage(data.message || "Valuation request submitted");
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+    <form onSubmit={onSubmit} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card" aria-live="polite">
       <h3 className="text-xl font-semibold text-brand-navy">Request a valuation</h3>
+      <p className="mt-2 text-xs text-brand-slate">Secure form. We only use this information to respond to your request.</p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
         <TextInput name="name" placeholder="Full Name" required />
         <TextInput name="email" type="email" placeholder="Email Address" required />
         <TextInput name="phone" placeholder="Phone Number" className="sm:col-span-2" />

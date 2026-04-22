@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/container";
 
 const quickLinks = [
   ["About", "/about"],
-  ["Valuation Services", "/valuation-services"],
+  ["Valuation Services", "/valuation"],
   ["Estate Agency", "/estate-agency"],
   ["Properties", "/properties"],
   ["Insights", "/insights"],

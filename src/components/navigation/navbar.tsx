@@ -27,7 +27,7 @@ export function Navbar() {
           </nav>
 
           <div className="hidden lg:block">
-            <Button href="/contact" variant="primary">
+            <Button href="/valuation" variant="primary">
               Request a Valuation
             </Button>
           </div>
@@ -55,7 +55,7 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Button href="/contact" className="mt-2 w-full" variant="primary">
+            <Button href="/valuation" className="mt-2 w-full" variant="primary">
               Request a Valuation
             </Button>
           </nav>

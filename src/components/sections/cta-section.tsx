@@ -11,7 +11,7 @@ export function CtaSection() {
             Engage an experienced team for independent valuation guidance aligned with lender, investor, legal, and internal decision requirements.
           </p>
         </div>
-        <Button href="/contact" variant="secondary" className="h-fit">
+        <Button href="/valuation" variant="secondary" className="h-fit">
           Request a Valuation
         </Button>
       </div>

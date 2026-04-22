@@ -1,19 +1,35 @@
 import type { Metadata } from "next";
 import { PropertiesListingClient } from "@/components/properties/properties-listing-client";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Section } from "@/components/shared/section";
 import { getAllProperties } from "@/lib/properties";
+import { getBaseUrl } from "@/lib/site-config";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Properties | Ragos Valuers and Estate Agents",
+  title: "Properties",
   description:
-    "Browse premium residential, commercial, and development listings across Nairobi with trusted guidance from Ragos Valuers and Estate Agents."
+    "Browse premium residential, commercial, and development listings across Nairobi with trusted guidance from Ragos Valuers and Estate Agents.",
+  alternates: { canonical: "/properties" }
 };
 
 export default async function PropertiesPage() {
   const properties = await getAllProperties();
+  const baseUrl = getBaseUrl();
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${baseUrl}/` },
+            { "@type": "ListItem", position: 2, name: "Properties", item: `${baseUrl}/properties` }
+          ]
+        }}
+      />
       <section className="bg-gradient-to-br from-brand-mist via-white to-[#fdf6eb] py-16 sm:py-20">
         <div className="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">Property Listings</p>
