@@ -93,13 +93,13 @@ export default async function Home() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-medium text-white/80 sm:text-sm">
-              <a href={`tel:${contactDetails.valuationPhone}`} className="transition hover:text-white">
+              <a href={contactDetails.valuationPhoneHref} className="transition hover:text-white">
                 Valuation: {contactDetails.valuationPhoneDisplay}
               </a>
-              <a href={`tel:${contactDetails.inquiriesPhone}`} className="transition hover:text-white">
+              <a href={contactDetails.inquiriesPhoneHref} className="transition hover:text-white">
                 Inquiries: {contactDetails.inquiriesPhoneDisplay}
               </a>
-              <a href={`mailto:${contactDetails.email}`} className="transition hover:text-white">
+              <a href={contactDetails.emailHref} className="transition hover:text-white">
                 {contactDetails.email}
               </a>
             </div>
