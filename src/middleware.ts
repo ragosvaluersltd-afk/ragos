@@ -8,18 +8,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("sb-access-token")?.value;
-  const role = request.cookies.get("admin-role")?.value;
-
   if (pathname === "/admin/login") {
-    if (token && role === "admin") {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
-
     return NextResponse.next();
   }
 
-  if (!token || role !== "admin") {
+  const token = request.cookies.get("sb-access-token")?.value;
+
+  if (!token) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 

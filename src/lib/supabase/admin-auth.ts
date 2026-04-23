@@ -1,33 +1,12 @@
-import { cookies } from "next/headers";
-import { getSupabasePublicConfig, getSupabaseServiceRoleKey } from "@/lib/supabase/config";
+import { getSupabasePublicConfig } from "@/lib/supabase/config";
+import { getAuthenticatedUser, getProfileById } from "@/lib/supabase/auth";
 import { AdminSession } from "@/types/admin";
-import { ProfileRow } from "@/types/supabase";
 
 type AuthTokenResponse = {
   access_token: string;
   refresh_token: string;
   user: { id: string; email?: string };
 };
-
-async function getProfile(userId: string) {
-  const { url } = getSupabasePublicConfig();
-  const serviceRole = getSupabaseServiceRoleKey();
-
-  const response = await fetch(`${url}/rest/v1/profiles?select=id,email,role&id=eq.${encodeURIComponent(userId)}&limit=1`, {
-    headers: {
-      apikey: serviceRole,
-      Authorization: `Bearer ${serviceRole}`
-    },
-    cache: "no-store"
-  });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const rows = (await response.json()) as Pick<ProfileRow, "id" | "email" | "role">[];
-  return rows[0] ?? null;
-}
 
 export async function loginAdmin(email: string, password: string) {
   const { url, anonKey } = getSupabasePublicConfig();
@@ -47,7 +26,7 @@ export async function loginAdmin(email: string, password: string) {
   }
 
   const authData = (await response.json()) as AuthTokenResponse;
-  const profile = await getProfile(authData.user.id);
+  const profile = await getProfileById(authData.user.id);
 
   if (!profile || profile.role !== "admin") {
     throw new Error("This account is not authorized for admin access");
@@ -65,16 +44,19 @@ export async function loginAdmin(email: string, password: string) {
 }
 
 export async function getAdminSession(): Promise<AdminSession | null> {
-  const cookieStore = await cookies();
-  const role = cookieStore.get("admin-role")?.value;
-  const userId = cookieStore.get("admin-user-id")?.value;
-  const email = cookieStore.get("admin-email")?.value;
+  const user = await getAuthenticatedUser();
 
-  if (role !== "admin" || !userId || !email) return null;
+  if (!user) return null;
+
+  const profile = await getProfileById(user.id);
+
+  if (!profile || profile.role !== "admin" || !profile.email) {
+    return null;
+  }
 
   return {
-    id: userId,
-    email,
+    id: profile.id,
+    email: profile.email,
     role: "admin"
   };
 }

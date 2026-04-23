@@ -26,25 +26,8 @@ export async function POST(request: Request) {
       path: "/"
     });
 
-    response.cookies.set("admin-role", "admin", {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/"
-    });
-
-    response.cookies.set("admin-user-id", session.user.id, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/"
-    });
-
-    response.cookies.set("admin-email", session.user.email, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/"
+    ["admin-role", "admin-user-id", "admin-email"].forEach((key) => {
+      response.cookies.set(key, "", { path: "/", expires: new Date(0) });
     });
 
     return response;
