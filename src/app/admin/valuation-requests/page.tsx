@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { listAdminValuationRequests } from "@/lib/supabase/admin-queries";
 
 export default async function AdminValuationRequestsPage() {
