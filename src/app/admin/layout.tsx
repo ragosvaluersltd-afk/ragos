@@ -11,11 +11,16 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await getAdminSession();
+  try {
+    const session = await getAdminSession();
 
-  if (!session) {
+    if (!session) {
+      redirect("/admin/login");
+    }
+
+    return <AdminShell email={session.email}>{children}</AdminShell>;
+  } catch (error) {
+    console.error("[admin-layout] Unable to resolve admin session; redirecting to login", error);
     redirect("/admin/login");
   }
-
-  return <AdminShell email={session.email}>{children}</AdminShell>;
 }

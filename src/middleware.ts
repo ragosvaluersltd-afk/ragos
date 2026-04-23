@@ -3,19 +3,41 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isAdminLoginRoute = pathname === "/admin/login" || pathname === "/admin/login/";
+  const hasAccessTokenCookie = Boolean(request.cookies.get("sb-access-token")?.value);
+  const hasRefreshTokenCookie = Boolean(request.cookies.get("sb-refresh-token")?.value);
+  const hasAuthCookie = hasAccessTokenCookie || hasRefreshTokenCookie;
 
-  if (!pathname.startsWith("/admin")) {
+  console.log("[middleware][admin]", {
+    pathname,
+    isAdminLoginRoute,
+    hasAuthCookie,
+    redirecting: false,
+    redirectTo: null
+  });
+
+  if (!isAdminRoute) {
     return NextResponse.next();
   }
 
-  if (pathname === "/admin/login") {
+  // Hard-safe route: never redirect /admin/login from middleware.
+  // Any uncertain auth state should be resolved by server-side admin checks.
+  if (isAdminLoginRoute) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("sb-access-token")?.value;
-
-  if (!token) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+  // For protected admin routes, only redirect when clearly unauthenticated.
+  if (!hasAuthCookie) {
+    const redirectTo = new URL("/admin/login", request.url);
+    console.log("[middleware][admin]", {
+      pathname,
+      isAdminLoginRoute,
+      hasAuthCookie,
+      redirecting: true,
+      redirectTo: redirectTo.toString()
+    });
+    return NextResponse.redirect(redirectTo);
   }
 
   return NextResponse.next();

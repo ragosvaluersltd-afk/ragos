@@ -3,10 +3,14 @@ import { AdminLoginForm } from "@/components/admin/admin-login-form";
 import { getAdminSession } from "@/lib/supabase/admin-auth";
 
 export default async function AdminLoginPage() {
-  const session = await getAdminSession();
+  try {
+    const session = await getAdminSession();
 
-  if (session) {
-    redirect("/admin/dashboard");
+    if (session) {
+      redirect("/admin/dashboard");
+    }
+  } catch (error) {
+    console.error("[admin-login] Unable to resolve admin session; rendering login page", error);
   }
 
   return (
